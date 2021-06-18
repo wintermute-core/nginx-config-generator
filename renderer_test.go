@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 )
@@ -55,6 +54,12 @@ func TestServersRenderer(t *testing.T) {
 						Ip:   "9.8.7.6",
 						Port: 5432,
 					},
+					IpFilter: []NginxIpFilter{
+						{
+							Allow: true,
+							Value: "4.4.4.4",
+						},
+					},
 				},
 			},
 			IpFilter: []NginxIpFilter{
@@ -67,5 +72,28 @@ func TestServersRenderer(t *testing.T) {
 	}
 
 	output := renderServers(nginxServers)
-	fmt.Printf("%s\n", output)
+
+	if !strings.Contains(output, "1.2.3.4:666") {
+		t.Error("Server listen line not rendered")
+	}
+
+	if !strings.Contains(output, "potato.com") {
+		t.Error("Server name not rendered")
+	}
+
+	if !strings.Contains(output, "/potato/tomato") {
+		t.Error("Root path not rendered")
+	}
+
+	if !strings.Contains(output, "upstream666") {
+		t.Error("Upstream not included")
+	}
+
+	if !strings.Contains(output, "4.4.4.4") {
+		t.Error("Ip filter for location not included")
+	}
+
+	if !strings.Contains(output, "5.6.7.8") {
+		t.Error("Ip filter for server not included")
+	}
 }
