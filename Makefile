@@ -14,3 +14,6 @@ build:
 itest: build
 	INPUT_FILE=itest/input.yml OUTPUT_FILE=itest/app-config-nginx.conf ./nginx-config-generator
 	docker run -t -v ${current_dir}:/app --entrypoint '/app/itest/itest.sh' nginx:stable-alpine
+
+container:
+	docker build . -t nginx-config-generator:$(shell git rev-parse --short HEAD)
