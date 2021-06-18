@@ -1,5 +1,26 @@
 package main
 
+// Input model
+
+type IpFilter []string
+
+type CatchAll map[string]interface{}
+
+type PathBasedMapping map[string]string
+
+type App struct {
+	CatchAll                   string                      `yaml:"catchall"`
+	Fqdn                       []string                    `yaml:"fqdn"`
+	RuntimePort                int                         `yaml:"runtime_port"`
+	PathBasedAccessRestriction map[string]PathBasedMapping `yaml:"path_based_access_restriction"`
+}
+
+type Input struct {
+	IpFilter map[string]IpFilter `yaml:ipfilter`
+	CatchAll map[string]CatchAll `yaml:"catchall"`
+	App      map[string]App      `yaml:"app"`
+}
+
 // Nginx upstream representation
 type NginxUpstream struct {
 	Name string
