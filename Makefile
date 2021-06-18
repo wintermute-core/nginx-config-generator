@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 current_dir = $(shell pwd)
 
-all: test build
+all: test build itest
 
 test:
 	go fmt
@@ -9,6 +9,7 @@ test:
 	go tool cover -html=coverage.out -o coverage.html
 
 build:
+	go mod download
 	go build
 
 itest: build
