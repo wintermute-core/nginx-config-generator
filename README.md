@@ -13,6 +13,25 @@ Flow:
  * build internal model
  * render nginx config based on internal model
 
+
+
+# Building
+
+```
+go build
+```
+
+Local execution:
+```
+INPUT_FILE=examples/input.yml ./nginx-config-generator  
+```
+
+# Future work
+
+ * extended validation: IP ranges validation, ports
+ * validate if application paths override
+ * add more flexible configuration
+
 # License
 
 Only for reference, distribution and/or commercial usage not allowed

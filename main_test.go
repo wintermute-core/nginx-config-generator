@@ -49,25 +49,25 @@ func TestUpstreamExtraction(t *testing.T) {
 func TestAppExtraction(t *testing.T) {
 	input := Input{
 		IpFilter: map[string]IpFilter{
-			"Tomato" : {
+			"Tomato": {
 				"6.6.6.6",
 			},
 		},
-		CatchAll: map[string]CatchAll {
-			"Potato1" : {
+		CatchAll: map[string]CatchAll{
+			"Potato1": {
 				"port": 5555,
 			},
-			"Potato2" : {
+			"Potato2": {
 				"port": 12345,
 			},
 		},
 		App: map[string]App{
 			"Tomato": App{
-				CatchAll:                   "Potato1",
-				Fqdn:                       []string{"service1", "service2"},
-				RuntimePort:                666,
+				CatchAll:    "Potato1",
+				Fqdn:        []string{"service1", "service2"},
+				RuntimePort: 666,
 				PathBasedAccessRestriction: map[string]PathBasedMapping{
-					"/cucumber" : {
+					"/cucumber": {
 						IpFilterKey: "Tomato",
 					},
 				},

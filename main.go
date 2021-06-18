@@ -55,7 +55,7 @@ func main() {
 	upstreams := renderUpstreams(nginxModel.Upstreams)
 	servers := renderServers(nginxModel.Servers)
 
-	file, err := os.OpenFile(outputFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	file, err := os.OpenFile(outputFile, os.O_WRONLY|os.O_CREATE, 0600)
 	check(err)
 	defer file.Close()
 	_, err = file.WriteString(fmt.Sprintf("%s\n%s\n", upstreams, servers))
