@@ -48,14 +48,19 @@ func main() {
 
 	extractApplications(&input, &nginxModel)
 
+	outputFile := env("OUTPUT_FILE", "nginx.conf")
+	log.Printf("Rendering config to %s", outputFile)
+
 	// render output
 	upstreams := renderUpstreams(nginxModel.Upstreams)
-	log.Printf("%v\n", upstreams)
-
 	servers := renderServers(nginxModel.Servers)
-	log.Printf("%v\n", servers)
-}
 
+	file, err := os.OpenFile(outputFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	check(err)
+	defer file.Close()
+	_, err = file.WriteString(fmt.Sprintf("%s\n%s\n", upstreams, servers))
+	check(err)
+}
 
 // Define "root" location in server configuration, if is not explicitly defined by application
 func defineSeverRootLocation(server *NginxServer, n *NginxUpstream) {
@@ -182,7 +187,6 @@ func createDefaultServer(nginxModel *NginxModel) {
 	}
 	nginxModel.Servers = append(nginxModel.Servers, defaultServer)
 }
-
 
 func check(err error) {
 	if err != nil {
