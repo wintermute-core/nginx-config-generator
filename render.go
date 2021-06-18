@@ -24,9 +24,7 @@ func renderUpstreams(upstreams map[string]NginxUpstream) string {
 	return tpl.String()
 }
 
-func renderServers(Servers []NginxServer) string {
-
-	const nginxTpl = `
+var serverTpl = env("SERVER_TPL", `
 {{ range . }}
 server {
   {{ range .Listen }} listen {{ . }};
@@ -52,10 +50,12 @@ server {
   {{  end }}
 }
 {{  end }}
-`
+`)
+
+func renderServers(Servers []NginxServer) string {
 
 	var tpl bytes.Buffer
-	t, err := template.New("servers").Parse(nginxTpl)
+	t, err := template.New("servers").Parse(serverTpl)
 	check(err)
 
 	err = t.Execute(&tpl, Servers)
