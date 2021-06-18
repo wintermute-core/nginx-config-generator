@@ -1,25 +1,64 @@
 package main
 
+// template renderer
 import (
-	"fmt"
-	"log"
-	"os"
+	"bytes"
+	"html/template"
 )
 
-func main() {
-	fmt.Println("hello world")
+var upstreamTpl = env("UPSTREAM_TPL", `
+{{ range . }}
+upstream {{ .Name }} {
+    server {{ .Ip }}:{{ .Port }};
+}
+{{  end }}
+`)
+
+func renderUpstreams(upstreams map[string]NginxUpstream) string {
+
+	var tpl bytes.Buffer
+	t, err := template.New("renderUpstreams").Parse(upstreamTpl)
+	check(err)
+	err = t.Execute(&tpl, upstreams)
+	check(err)
+	return tpl.String()
 }
 
-func check(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
+var serverTpl = env("SERVER_TPL", `
+{{ range . }}
+server {
+  {{ range .Listen }} listen {{ . }};
+  {{  end }}
+  {{ range .ServerName }} server_name {{ . }};
+  {{  end }}
+  {{ if .Root }}
+  root {{ .Root }};
+  {{  end }}
 
-func env(name string, def string) string {
-	v := os.Getenv(name)
-	if v == "" {
-		return def
-	}
-	return v
+  {{ range .Location }}
+  location {{.Path}} {
+    {{ if .Return }} return {{ .Return }}; {{  end }}
+    {{ if .ProxyPass }} proxy_pass http://{{.ProxyPass.Name}};  {{  end }}
+    {{ if .IpFilter }}
+    {{ range .IpFilter }} {{ if .Allow }} allow {{ else }} deny {{ end }} {{ .Value }};
+    {{ end }}
+    {{ end }}
+  }
+  {{  end }}
+  {{ range .IpFilter }}
+    {{ if .Allow }} allow {{ else }} deny {{ end }} {{ .Value }};
+  {{  end }}
+}
+{{  end }}
+`)
+
+func renderServers(Servers []NginxServer) string {
+
+	var tpl bytes.Buffer
+	t, err := template.New("servers").Parse(serverTpl)
+	check(err)
+
+	err = t.Execute(&tpl, Servers)
+	check(err)
+	return tpl.String()
 }

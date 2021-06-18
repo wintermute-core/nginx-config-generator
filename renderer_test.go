@@ -20,22 +20,22 @@ func TestUpstreamRender(t *testing.T) {
 	}
 	output := renderUpstreams(upstreams)
 	if !strings.Contains(output, "Potato123") {
-		t.Error("Upstream name not rendered")
+		t.Fatal("Upstream name not rendered")
 	}
 	if !strings.Contains(output, "Tomato123") {
-		t.Error("Upstream name not rendered")
+		t.Fatal("Upstream name not rendered")
 	}
 	if !strings.Contains(output, "6.6.6.6") {
-		t.Error("Upstream IP not rendered")
+		t.Fatal("Upstream IP not rendered")
 	}
 	if !strings.Contains(output, "1.2.3.4") {
-		t.Error("Upstream IP not rendered")
+		t.Fatal("Upstream IP not rendered")
 	}
 	if !strings.Contains(output, "666") {
-		t.Error("Upstream Port not rendered")
+		t.Fatal("Upstream Port not rendered")
 	}
 	if !strings.Contains(output, "123") {
-		t.Error("Upstream Port not rendered")
+		t.Fatal("Upstream Port not rendered")
 	}
 }
 
@@ -74,26 +74,26 @@ func TestServersRenderer(t *testing.T) {
 	output := renderServers(nginxServers)
 
 	if !strings.Contains(output, "1.2.3.4:666") {
-		t.Error("Server listen line not rendered")
+		t.Fatal("Server listen line not rendered")
 	}
 
 	if !strings.Contains(output, "potato.com") {
-		t.Error("Server name not rendered")
+		t.Fatal("Server name not rendered")
 	}
 
 	if !strings.Contains(output, "/potato/tomato") {
-		t.Error("Root path not rendered")
+		t.Fatal("Root path not rendered")
 	}
 
 	if !strings.Contains(output, "upstream666") {
-		t.Error("Upstream not included")
+		t.Fatal("Upstream not included")
 	}
 
 	if !strings.Contains(output, "4.4.4.4") {
-		t.Error("Ip filter for location not included")
+		t.Fatal("Ip filter for location not included")
 	}
 
 	if !strings.Contains(output, "5.6.7.8") {
-		t.Error("Ip filter for server not included")
+		t.Fatal("Ip filter for server not included")
 	}
 }
