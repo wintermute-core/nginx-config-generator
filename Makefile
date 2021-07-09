@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 current_dir = $(shell pwd)
 
-all: test build itest
+all: build test itest
 
 test:
 	go fmt
