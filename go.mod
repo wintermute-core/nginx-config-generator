@@ -1,4 +1,4 @@
-module nginx-config-generator
+module github.com/wintermute-core/nginx-config-generator
 
 go 1.16
 

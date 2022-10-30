@@ -88,4 +88,4 @@ INPUT_FILE=examples/input.yml ./nginx-config-generator
 
 # License
 
-Only for reference, distribution and/or commercial usage not allowed
+MIT
